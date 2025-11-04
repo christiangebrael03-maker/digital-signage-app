@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Signage Control — Minimal</title>
+<link rel="stylesheet" href="control.css" />
+</head>
+<body>
+  <div class="app">
+    <header><h1>Signage Control</h1></header>
+    <main>
+      <aside class="left">
+        <h3>Locations</h3>
+        <ul id="locations"></ul>
+      </aside>
+      <section class="middle">
+        <h3>Screens</h3>
+        <ul id="screens"></ul>
+      </section>
+      <section class="right">
+        <h3>Upload</h3>
+        <div id="drop" class="drop">Drop image/video or click</div>
+        <input id="file" type="file" accept="image/*,video/*" style="display:none" />
+        <div id="preview" class="preview">No preview</div>
+        <button id="uploadBtn">Upload & Push</button>
+        <div id="status" class="status"></div>
+      </section>
+    </main>
+  </div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="control.js"></script>
+</body>
+</html>

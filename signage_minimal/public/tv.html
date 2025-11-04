@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Signage TV — Minimal</title>
+<style>
+  html,body{height:100%;margin:0;background:black}
+  #container{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+  img,video{max-width:100%;max-height:100%}
+</style>
+</head>
+<body>
+  <div id="container">Loading...</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+const params = new URLSearchParams(location.search);
+const screenId = params.get('screen') || 'screen-1';
+const container = document.getElementById('container');
+
+function showContent(resource_type, url) {
+  container.innerHTML = '';
+  if(!url) return container.innerText = 'No content';
+  if(resource_type && resource_type.startsWith('video')){
+    const v = document.createElement('video');
+    v.src = url; v.autoplay = true; v.loop = true; v.muted = true; v.playsInline = true;
+    v.style.width = '100%'; v.style.height = '100%'; v.style.objectFit = 'cover';
+    container.appendChild(v);
+  } else {
+    const img = document.createElement('img'); img.src = url; img.style.width='100%'; img.style.height='100%'; img.style.objectFit='cover'; container.appendChild(img);
+  }
+}
+
+socket.on('connect', ()=> {
+  socket.emit('join', { screenId });
+});
+
+socket.on('screen:update', ({ screenId: s, url, resource_type }) => {
+  if(s !== screenId) return;
+  showContent(resource_type, url);
+});
+
+// initial fetch
+fetch('/api/screen/' + screenId).then(r=>r.json()).then(data => {
+  showContent(data.resource_type, data.url);
+});
+</script>
+</body>
+</html>
