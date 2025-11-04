@@ -1,21 +1,14 @@
-// Minimal signage server
-// Requirements: set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET env vars
-const express = require('express');
-const http = require('http');
-const multer = require('multer');
-const cors = require('cors');
-const { v2: cloudinary } = require('cloudinary');
-const streamifier = require('streamifier');
-const path = require('path');
+const express = require("express");
+const multer = require("multer");
+const cors = require("cors");
+const { v2: cloudinary } = require("cloudinary");
+const http = require("http");
+const { Server } = require("socket.io");
+require("dotenv").config();
 
 const app = express();
-const server = http.createServer(app);
-const io = require('socket.io')(server, { cors: { origin: '*' } });
-
 app.use(cors());
-app.use(express.json());
-app.use(express.static('public'));
-
+app.use(express.static("public"));
 // Cloudinary config from env
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
